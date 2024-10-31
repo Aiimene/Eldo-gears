@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Carousel</title>
+    <style>
+        /* Container and Layout Styling */
+        .describe {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 90%;
+            margin: 0 auto;
+            padding: 20px; /* Adjusted padding for better spacing */
+        }
+
+        .select-text {
+            display: flex;
+            flex-direction: column;
+            width: 60%;
+            padding-right: 10px; /* Extra spacing for visual separation */
+        }
+
+        .last {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Card and Link Styles */
+        .block-link {
+            display: block;
+            text-decoration: none; /* Removed underline */
+            color: inherit;
+            padding: 15px; /* Increased padding for better click area */
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+            width: 49%;
+            font-size: 0.75rem;
+        }
+
+        .block-link:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Row Styling */
+        .row:not(.last) {
+            border: 1px solid #CD7F32;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            padding: 15px; /* Adjusted padding for consistency */
+        }
+
+        .row h2, .block-link h2 {
+            font-size: 1.25em;
+            margin: 0;
+            color: #CD7F32;
+            font-weight: bold;
+        }
+
+        .row p, .block-link p {
+            color: #333;
+            font-size: 0.9em;
+            line-height: 1.4;
+            margin-top: 6px;
+        }
+
+        /* Carousel Container and Image Styles */
+        .carousel-container {
+            overflow: hidden;
+            width: 37%;
+            height: 100%;
+            position: relative;
+        }
+
+        .select-image {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+
+        .select-image img {
+            width: 100%;
+            min-width: 100%;
+            object-fit: cover;
+        }
+
+        /* Carousel Navigation Buttons */
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .nav-button.left {
+            left: 10px;
+        }
+
+        .nav-button.right {
+            right: 10px;
+        }
+
+        .nav-button:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <section class="describe">
+        <div class="select-text">
+            <div class="row">
+                <h2><a href="#makes">Find a Car by Make</a></h2>
+                <p>Choose your ideal car by selecting a specific make. Browse through a variety of options to find the perfect fit for you!</p>
+            </div>
+            <div class="row">
+                <h2><a href="#category">Find a Car by Category</a></h2>
+                <p>Discover the perfect car that fits your lifestyle and needs.</p>
+            </div>
+            <div class="row">
+                <h2><a href="#">Find a Car by Year</a></h2>
+                <p>Explore cars from different model years to find the one that best suits your style and preferences.</p>
+            </div>
+            <div class="row">
+                <h2><a href="#">Find a Car by Budget</a></h2>
+                <p>Find your favorite car that fits your budget.</p>
+            </div>
+            <div class="row last">
+                <a href="#" class="block-link">
+                    <h2>View Most Popular Cars</h2>
+                    <p>Check out our most popular models, chosen for style, performance, and reliability.</p>
+                </a>
+                <a href="#" class="block-link">
+                    <h2>Discover Our Best Offers</h2>
+                    <p>Explore exclusive deals and discounts to find the best value for your investment.</p>
+                </a>
+            </div>
+        </div>
+        <div class="carousel-container">
+            <div class="select-image">
+                <img src="./x.png" alt="Image 1">
+                <img src="./github.png" alt="Image 2">
+                <img src="./makes/gt63s.png" alt="Image 3">
+            </div>
+            <button class="nav-button left" onclick="moveSlide(-1)">&#10094;</button> 
+            <button class="nav-button right" onclick="moveSlide(1)">&#10095;</button>
+        </div>
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            let lastScrollTop = 0;
+            const navbar = $(".nav");
+            let currentScroll = 0;
+
+            // Navbar Hide on Scroll
+            $(window).on('scroll', function() {
+                currentScroll = $(this).scrollTop();
+                navbar.toggleClass('hidden', currentScroll > lastScrollTop);
+                lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+            });
+
+            let currentIndex = 0;
+            const totalSlides = document.querySelectorAll('.select-image img').length;
+
+            // Slide Navigation
+            function moveSlide(direction) {
+                currentIndex += direction;
+
+                // Prevents loop-back to the first image
+                if (currentIndex >= totalSlides) currentIndex = totalSlides - 1;
+                if (currentIndex < 0) currentIndex = 0;
+
+                // Move to the calculated offset
+                const offset = -currentIndex * 100;
+                document.querySelector('.select-image').style.transform = `translateX(${offset}%)`;
+            }
+
+            // Slide Buttons Click Events
+            $('.nav-button.left').on('click', () => moveSlide(-1));
+            $('.nav-button.right').on('click', () => moveSlide(1));
+
+            // Auto-slide every 2 seconds
+            setInterval(() => moveSlide(1), 2000);
+        });
+    </script>
+</body>
+</html>
