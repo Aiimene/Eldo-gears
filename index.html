@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Please Wait...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+            height: 100vh; /* Full viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #waitingMessage {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        /* Container for the rotating image and spinner */
+        .rotating-container {
+            position: relative;
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+        }
+
+        /* Rotating image styles */
+        .rotating-image {
+            width: 150px;  /* Set the size of the image */
+            height: 150px;
+            border-radius: 50%; /* Make the image circular */
+            object-fit: cover; /* Ensure the image covers the container */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the image in the container */
+        }
+
+        /* Spinner style */
+        .rotating-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            animation: rotateSpinner 1.5s linear infinite;
+        }
+
+        /* Spinner animation */
+        @keyframes rotateSpinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        function startDownload() {
+            setTimeout(function() {
+                window.location.href = "home.html";
+            }, 5000);
+        }
+
+        window.onload = function() {
+            document.getElementById("waitingMessage").innerHTML = "Please wait while we prepare your content...";
+            startDownload(); 
+        };
+    </script>
+</head>
+<body>
+
+    <div class="rotating-container">
+        <img class="rotating-image" src="./images/test.png" alt="Rotating Image">
+    </div>
+
+    <p id="waitingMessage">Initializing...</p>
+    <p>If this takes too long, please refresh the page or contact support.</p>
+
+</body>
+</html>

@@ -3,70 +3,93 @@ $(document).ready(function() {
     const navbar = $(".nav");
     let currentScroll = 0;
 
-    // Scroll event for hiding navbar
     $(window).on('scroll', function() {
         currentScroll = $(this).scrollTop();
 
         if (currentScroll > lastScrollTop) {
-            navbar.addClass('hidden'); // Add 'hidden' class to navbar
+            navbar.addClass('hidden');
         } else {
-            navbar.removeClass('hidden'); // Remove 'hidden' class to show navbar
+            navbar.removeClass('hidden');
         }
         lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     });
 
-    $(document).ready(function() {
-      let lastScrollTop = 0;
-      const navbar = $(".nav");
-      let currentScroll = 0;
+    let currentIndex = 0;
 
-      // Scroll event for hiding navbar
-      $(window).on('scroll', function() {
-          currentScroll = $(this).scrollTop();
+    function moveSlide(direction) {
+        const slides = document.querySelectorAll('.select-image img');
+        const totalSlides = slides.length;
 
-          if (currentScroll > lastScrollTop) {
-              navbar.addClass('hidden'); // Add 'hidden' class to navbar
-          } else {
-              navbar.removeClass('hidden'); // Remove 'hidden' class to show navbar
-          }
-          lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-      });
+        currentIndex += direction;
 
-      let currentIndex = 0; // Initialize current index for the carousel
+        if (currentIndex < 0) {
+            currentIndex = totalSlides - 1;
+        } else if (currentIndex >= totalSlides) {
+            currentIndex = 0;
+        }
 
-      function moveSlide(direction) {
-          const slides = document.querySelectorAll('.select-image img');
-          const totalSlides = slides.length;
+        const offset = -currentIndex * 100;
+        document.querySelector('.select-image').style.transform = `translateX(${offset}%)`;
+    }
 
-          // Update current index
-          currentIndex += direction;
+    $('.nav-button.left').on('click', function() {
+        moveSlide(-1);
+    });
 
-          // Loop around the slides
-          if (currentIndex < 0) {
-              currentIndex = totalSlides - 1; // Go to the last slide
-          } else if (currentIndex >= totalSlides) {
-              currentIndex = 0; // Go to the first slide
-          }
+    $('.nav-button.right').on('click', function() {
+        moveSlide(1);
+    });
 
-          // Move the slides
-          const offset = -currentIndex * 100; // Calculate the offset
-          document.querySelector('.select-image').style.transform = `translateX(${offset}%)`;
-      }
+    setInterval(function() {
+        moveSlide(1);
+    }, 5000);
 
-      // Event listeners for slide buttons
-      $('.nav-button.left').on('click', function() {
-          moveSlide(-1); // Move to the previous slide
-      });
+    let textElement = document.getElementsByClassName("typing-animation")[0];
+    let content = [
+        "Discover our best offers.",
+        "Make auctions and bid.",
+        "Sell your car.",
+        "Discover experiences of other users.",
+        "Select and filter the car that fits your need."
+    ];
 
-      $('.nav-button.right').on('click', function() {
-          moveSlide(1); // Move to the next slide
-      });
+    let currentIndex2 = 0;
+    let images = document.querySelectorAll(".images-services .blur-layer");
 
-      // Automatically move slides every 2 seconds
-      setInterval(function() {
-          moveSlide(1); // Automatically move to the next slide
-      }, 5000); // 2000 milliseconds = 2 seconds
-  });
+    function typeWriterEffect(text, callback) {
+        let i = 0;
+        textElement.innerHTML = '';
+        let interval = setInterval(function() {
+            textElement.innerHTML += text[i];
+            i++;
+            adjustWidth();
+            if (i === text.length) {
+                clearInterval(interval);
+                setTimeout(callback, 4000);
+            }
+        }, 75);
+    }
 
-  
+    function adjustWidth() {
+        textElement.style.width = 'auto';
+        textElement.style.width = textElement.scrollWidth + 'px';
+    }
+
+    function changeImage() {
+        images.forEach((image, index) => {
+            image.style.display = index === currentIndex2 ? 'block' : 'none';
+        });
+    }
+
+    function changeTextAndImage() {
+        let currentText = content[currentIndex2];
+        typeWriterEffect(currentText, function() {
+            currentIndex2 = (currentIndex2 + 1) % content.length; 
+            changeImage(); 
+            changeTextAndImage(); 
+        });
+    }
+
+    changeImage();
+    changeTextAndImage();
 });
